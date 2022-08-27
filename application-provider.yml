@@ -1,0 +1,51 @@
+server:
+  port: 9008
+
+spring:
+  profiles: dev
+  #数据源配置连接oracle
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@192.168.31.120:1521:lakersdb
+    username: ronin
+    password: roninzjf
+
+eureka:
+  instance:
+    hostname: microservicecloud-config-eureka-dev
+    #是否采用ip注册
+    prefer-ip-address: true
+    #指定实例id的显示格式
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://configEureka-dev:7004/eureka
+
+---
+#端口号配置
+server:
+  port: 9009
+#jdbc数据源配置
+spring:
+  profiles: prod
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.31.54:3306/sinosoft
+    username: root
+    password: 123456
+
+eureka:
+  client:
+    #是否向Eureka注册服务：是
+    register-with-eureka: true
+    #向指定地址的Eureka注册自己的服务
+    service-url:
+      defaultZone: http://configEureka-prod:6001/eureka
+  instance:
+    #是否采用ip注册
+    prefer-ip-address: true
+    #指定实例id的显示格式
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}
